@@ -27,6 +27,10 @@ const App = (props) => {
       <br />
       <Button onClick={vote} text="vote" />
       <Button onClick={() => setSelected(Math.floor(Math.random() * anecdotes.length))} text="next anecdote" />
+      <h1>Anecdote with most votes</h1>
+      {props.anecdotes[mostVotes]}
+      <br />
+      has {votes[mostVotes]} votes
     </div>
   )
 }
