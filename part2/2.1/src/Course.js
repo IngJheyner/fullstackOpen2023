@@ -1,6 +1,20 @@
 import React from 'react'
-import { Header } from './Header.js'
-import { Content } from './Content.js'
+
+const Header = ({ course }) => {
+  return <h1>{course}</h1>
+}
+
+const Content = ({ parts }) => {
+  return (
+    <div>
+      {parts.map((part) => (
+        <p key={part.id}>
+          {part.name} {part.exercises}
+        </p>
+      ))}
+    </div>
+  )
+}
 
 export const Course = ({ course }) => {
   return (
