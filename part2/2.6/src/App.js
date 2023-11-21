@@ -69,7 +69,17 @@ const App = () => {
     console.log('button clicked', event.target)
 
     if (persons.some(person => person.name === newName)) {
-      alert(`${newName} is already added to phonebook`)
+
+      if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+        const person = persons.find(p => p.name === newName)
+        const changedPerson = { ...person, number: newNumber }
+        personService
+          .update(person.id, changedPerson)
+          .then(returnedPerson => {
+            setPersons(persons.map(p => p.id !== person.id ? p : returnedPerson))
+          })
+      }
+
       return
     }
 
@@ -94,18 +104,18 @@ const App = () => {
   }
 
   const handleNameChange = (event) => {
-    console.log(event.target.value)
+    //console.log(event.target.value)
     setNewName(event.target.value)
 
   }
 
   const handleNumberChange = (event) => {
-    console.log(event.target.value)
+    //console.log(event.target.value)
     setNewNumber(event.target.value)
   }
 
   const handleSearchChange = (event) => {
-    console.log(event.target.value)
+    //console.log(event.target.value)
     setSearch(event.target.value)
   }
 
