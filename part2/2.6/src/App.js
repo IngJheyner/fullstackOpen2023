@@ -26,23 +26,11 @@ const PersonForm = ({addPerson, newName, handleNameChange, newNumber, handleNumb
   )
 }
 
-const button = (person,setPersons) => {
-  if (window.confirm(`Delete ${person.name}?`)) {
-    personService
-      .destroy(person.id)
-      .then(() => {
-        //setPersons(persons.filter(p => p.id !== person.id))
-      })
-  }
-}
-
-
-const Persons = ({personsToShow}) => {
+const Persons = ({personsToShow, removePerson}) => {
 
   return (
     <div>
-      {personsToShow.map(person => <div key={person.name}>{person.name} {person.number}
-        <button onClick={() => button(person, personsToShow)}>delete</button>
+      {personsToShow.map(person => <div key={person.id}>{person.name} {person.number} <button onClick={() => removePerson(person.id)}>delete</button>
       </div>)}
     </div>
   )
@@ -55,6 +43,29 @@ const Notification = ({ message }) => {
 
   return (
     <div className="error">
+      {message}
+    </div>
+  )
+}
+
+const ErrorNotification = ({ message }) => {
+
+  const errorStyle = {
+    color: 'red',
+    background: 'lightgrey',
+    fontSize: 20,
+    borderStyle: 'solid',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+  }
+
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div style={errorStyle}>
       {message}
     </div>
   )
@@ -76,7 +87,8 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ search, setSearch ] = useState('')
-  const [ errorMessage, setErrorMessage ] = useState(null)
+  const [ Message, setMessage ] = useState(null)
+  const [ error, setError ] = useState(null)
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -92,14 +104,27 @@ const App = () => {
           .then(returnedPerson => {
             setPersons(persons.map(p => p.id !== person.id ? p : returnedPerson))
           })
+          .catch(error => {
+            setError(
+              `Information of ${person.name} has already been removed from server`
+            )
 
-        setErrorMessage(
-          `Changed ${newName}`
-        )
+            setTimeout(() => {
+              setError(null)
+            } , 5000)
+          })
 
-        setTimeout(() => {
-          setErrorMessage(null)
-        } , 5000)
+        if (error !== null) {
+          return
+        } else {
+          setMessage(
+            `Updated ${newName}`
+          )
+
+          setTimeout(() => {
+            setMessage(null)
+          } , 5000)
+        }
       }
 
       return
@@ -119,12 +144,12 @@ const App = () => {
         setNewNumber('')
       });
 
-    setErrorMessage(
+    setMessage(
       `Added ${newName}`
     )
 
     setTimeout(() => {
-      setErrorMessage(null)
+      setMessage(null)
     } , 5000)
     //setPersons(persons.concat(personObject))
 
@@ -148,6 +173,17 @@ const App = () => {
     setSearch(event.target.value)
   }
 
+  const removePerson = (id) => {
+    const person = persons.find(p => p.id === id)
+    if (window.confirm(`Delete ${person.name}`)) {
+      personService
+        .destroy(id)
+        .then(returnedPerson => {
+          setPersons(persons.filter(p => p.id !== id))
+        })
+    }
+  }
+
   const personsToShow = search === ''
     ? persons
     : persons.filter(person => person.name.toLowerCase().includes(search.toLowerCase()))
@@ -155,12 +191,15 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={errorMessage} />
+      {error !== null}
+        <ErrorNotification message={error}/>
+      {Message !== null}
+        <Notification message={Message}/>
       <Filter search={search} handleSearchChange={handleSearchChange}/>
       <h2>Add a new</h2>
       <PersonForm addPerson={addPerson} newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberChange={handleNumberChange}/>
       <h2>Numbers</h2>
-      <Persons personsToShow={personsToShow}/>
+      <Persons personsToShow={personsToShow} removePerson={removePerson}/>
     </div>
   )
 }
