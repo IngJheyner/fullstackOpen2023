@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
 import personService from './services/person'
 
 const Filter = ({search, handleSearchChange}) => {
@@ -26,10 +25,24 @@ const PersonForm = ({addPerson, newName, handleNameChange, newNumber, handleNumb
   )
 }
 
+const button = (person,setPersons) => {
+  if (window.confirm(`Delete ${person.name}?`)) {
+    personService
+      .destroy(person.id)
+      .then(() => {
+        //setPersons(persons.filter(p => p.id !== person.id))
+      })
+  }
+}
+
+
 const Persons = ({personsToShow}) => {
+
   return (
     <div>
-      {personsToShow.map(person => <p key={person.name}>{person.name} {person.number}</p>)}
+      {personsToShow.map(person => <div key={person.name}>{person.name} {person.number}
+        <button onClick={() => button(person, personsToShow)}>delete</button>
+      </div>)}
     </div>
   )
 }
@@ -40,11 +53,10 @@ const App = () => {
 
   useEffect(() => {
     console.log('effect executed')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
+    personService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
       })
   }, [])
 
