@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import personService from './services/person'
+import './index.css'
 
 const Filter = ({search, handleSearchChange}) => {
   return (
@@ -47,6 +48,18 @@ const Persons = ({personsToShow}) => {
   )
 }
 
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className="error">
+      {message}
+    </div>
+  )
+}
+
 const App = () => {
 
   const [ persons, setPersons ] = useState([])
@@ -63,6 +76,7 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ search, setSearch ] = useState('')
+  const [ errorMessage, setErrorMessage ] = useState(null)
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -78,6 +92,14 @@ const App = () => {
           .then(returnedPerson => {
             setPersons(persons.map(p => p.id !== person.id ? p : returnedPerson))
           })
+
+        setErrorMessage(
+          `Changed ${newName}`
+        )
+
+        setTimeout(() => {
+          setErrorMessage(null)
+        } , 5000)
       }
 
       return
@@ -97,6 +119,13 @@ const App = () => {
         setNewNumber('')
       });
 
+    setErrorMessage(
+      `Added ${newName}`
+    )
+
+    setTimeout(() => {
+      setErrorMessage(null)
+    } , 5000)
     //setPersons(persons.concat(personObject))
 
     // setNewName('')
@@ -126,6 +155,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={errorMessage} />
       <Filter search={search} handleSearchChange={handleSearchChange}/>
       <h2>Add a new</h2>
       <PersonForm addPerson={addPerson} newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberChange={handleNumberChange}/>
