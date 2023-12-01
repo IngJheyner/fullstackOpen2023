@@ -1,12 +1,7 @@
-import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
-
-import axios from 'axios'
-
-axios.get('http://localhost:3001/notes')
-
-
+import React from 'react';
+import App from './App.js'
+import './index.css'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
