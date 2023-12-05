@@ -1,13 +1,26 @@
 const express = require('express')
 const cors = require('cors')
+const mongoose = require('mongoose')
+
+
 const app = express()
-
 app.use(express.json())
-
 app.use(cors())
 
 // Serviendo archivos estáticos desde la carpeta build
 app.use(express.static('build'))
+
+// Conexión a la base de datos
+const url = process.env.MONGODB_URI
+mongoose.connect(url)
+
+const noteSchema = new mongoose.Schema({
+    content: String,
+    date: Date,
+    important: Boolean,
+  })
+
+const Note = mongoose.model('Note', noteSchema)
 
 let notes = [
   {
