@@ -1,0 +1,11 @@
+### Eliminar un elemento de la lista
+DELETE http://localhost:3001/api/persons/4
+
+### Crear un nuevo elemento en la lista
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+  "name": "New Person",
+  "number": "040-123456"
+}
