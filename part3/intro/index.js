@@ -1,6 +1,5 @@
 const express = require('express')
 const cors = require('cors')
-const mongoose = require('mongoose')
 
 const dotenv = require('dotenv')
 dotenv.config()
@@ -13,7 +12,7 @@ app.use(express.static('build'))
 app.use(express.json())
 
 // Conexión a la base de datos
-const Note = require('./models/note');
+const Note = require('./models/note')
 
 app.get('/', (request, response) => {
   response.send('<h1>Hello World!</h1>')
@@ -39,24 +38,22 @@ app.get('/api/notes/:id', (request, response, next) => {
 
 })
 
-app.post('/api/notes', (request, response) => {
-  const body = request.body
+app.post('/api/notes', (request, response, next) => {
 
-  if (!body.content) {
-    return response.status(400).json({
-      error: 'content missing'
-    })
-  }
+    const body = request.body
 
     const note = new Note({
         content: body.content,
         important: body.important || false,
         date: new Date(),
-    });
-
-    note.save().then(savedNote => {
-        response.json(savedNote)
     })
+
+    note.save()
+    .then(savedNote => savedNote.toJSON())
+    .then(savedAndFormattedNote => {
+        response.json(savedAndFormattedNote)
+    })
+    .catch(error => next(error))
 
 })
 
@@ -77,9 +74,7 @@ app.put('/api/notes/:id', (request, response, next) => {
 
 app.delete('/api/notes/:id', (request, response, next) => {
     Note.findByIdAndDelete(request.params.id)
-        .then(result => {
-        response.status(204).end()
-        })
+        .then( () => response.status(204).end())
     .catch(error => next(error))
 })
 
@@ -95,6 +90,8 @@ const errorHandler = (error, request, response, next) => {
 
     if (error.name === 'CastError') {
       return response.status(400).send({ error: 'malformatted id' })
+    }else if (error.name === 'ValidationError') {
+        return response.status(400).json({ error: error.message })
     }
 
     next(error)
