@@ -1,0 +1,8 @@
+### Crear un nuevo elemento en la lista
+POST http://localhost:3001/api/notes
+Content-Type: application/json
+
+{
+  "content": "VS Code es genial",
+  "important": true
+}
