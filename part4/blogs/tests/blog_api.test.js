@@ -51,6 +51,25 @@ test('blogs are added correctly', async () => {
     expect(titles).toContain('Blog de prueba')
 })
 
+test('likes property is set to 0 if not provided', async () => {
+    const newBlog = {
+        title: 'Blog de prueba',
+        author: 'Miguel',
+        url: 'https://www.google.com',
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-type', /application\/json/)
+
+    const blogsAtEnd = await helper.blogsInDb()
+
+    expect(blogsAtEnd[blogsAtEnd.length - 1].likes).toBe(0)
+
+})
+
 afterAll(() => {
     mongoose.connection.close()
 })
