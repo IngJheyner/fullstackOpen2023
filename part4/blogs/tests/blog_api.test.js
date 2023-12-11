@@ -70,6 +70,23 @@ test('likes property is set to 0 if not provided', async () => {
 
 })
 
+test('blogs without title or url properties are not added', async () => {
+    const newBlog = {
+        author: 'Miguel',
+        likes: 0
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(400)
+
+    const blogsAtEnd = await helper.blogsInDb()
+
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+
+})
+
 afterAll(() => {
     mongoose.connection.close()
 })
