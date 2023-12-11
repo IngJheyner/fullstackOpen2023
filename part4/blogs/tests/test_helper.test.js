@@ -15,4 +15,9 @@ const initialBlogs = [
     }
 ]
 
-export default { initialBlogs }
+const blogsInDb = async () => {
+    const blogs = await Blog.find({})
+    return blogs.map(blog => blog.toJSON())
+}
+
+export default { initialBlogs, blogsInDb }
