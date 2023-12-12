@@ -6,6 +6,7 @@ import logger from './utils/logger.js'
 import mongoose from 'mongoose'
 import blogsRouter from './controllers/blog.js'
 import middleware from './utils/middleware.js'
+import 'express-async-errors'
 
 logger.info('connecting to', config.MONGODB_URI)
 

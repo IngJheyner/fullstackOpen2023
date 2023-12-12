@@ -1,5 +1,6 @@
 const notesRouter = require('express').Router()
 const Note = require('../models/note')
+const mongoose = require('mongoose')
 
 notesRouter.get('/', async (request, response) => {
     const notes = await Note.find({})
@@ -7,6 +8,11 @@ notesRouter.get('/', async (request, response) => {
 })
 
 notesRouter.get('/:id', async (request, response) => {
+
+    if (!mongoose.Types.ObjectId.isValid(request.params.id)) {
+        return response.status(400).send({ error: 'malformatted id' })
+    }
+
     const note = await Note.findById(request.params.id)
     if (note) {
       response.json(note)
@@ -24,8 +30,13 @@ notesRouter.post('/', async (request, response) => {
       date: new Date(),
     })
 
+    if (note.content === undefined) {
+        return response.status(400).json({ error: 'content missing' })
+    }
+
     const savedNote = await note.save()
     response.json(savedNote)
+
 })
 
 notesRouter.put('/:id', (request, response, next) => {
