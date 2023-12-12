@@ -16,7 +16,22 @@ blogsRouter.post('/', async (req, res, next) => {
     const savedBlog = await blog.save()
                         .catch(error => next(error))
     res.status(201).json(savedBlog)
-    
+
+})
+
+blogsRouter.put('/:id', async (req, res, next) => {
+
+    const id = req.params.id
+    const blog = req.body
+
+    if(!mongoose.Types.ObjectId.isValid(id)) {
+        return next({ name: 'CastError', message: 'malformatted id' })
+    }
+
+    const updatedBlog = await Blog.findByIdAndUpdate(id, blog, { new: true })
+                            .catch(error => next(error))
+    res.json(updatedBlog)
+
 })
 
 blogsRouter.delete('/:id', async (req, res, next) => {

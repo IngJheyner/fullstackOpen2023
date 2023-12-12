@@ -114,7 +114,44 @@ describe('deleting blogs', () => {
 
 })
 
-describe('updating blogs', () => {})
+describe('updating blogs', () => {
+
+    test('blogs are updated correctly', async () => {
+        const blogsAtStart = await helper.blogsInDb()
+        const blogToUpdate = blogsAtStart[0]
+
+        const updatedBlog = {
+            likes: 100
+        }
+
+        await api
+            .put(`/api/blogs/${blogToUpdate.id}`)
+            .send(updatedBlog)
+            .expect(200)
+            .expect('Content-type', /application\/json/)
+
+        const blogsAtEnd = await helper.blogsInDb()
+
+        expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+
+        expect(blogsAtEnd[0].likes).toBe(100)
+
+    })
+
+    test('updating a blog with an invalid id returns 400', async () => {
+
+        const updatedBlog = {
+            likes: 100
+        }
+
+        await api
+            .put('/api/blogs/123')
+            .send(updatedBlog)
+            .expect(400)
+
+    })
+
+})
 
 afterAll(() => {
     mongoose.connection.close()
