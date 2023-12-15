@@ -1,8 +1,35 @@
-### Crear un nuevo elemento en la lista
-POST http://localhost:3001/api/notes
+### Obtener un usuarios
+GET http://localhost:3001/api/users
+
+### Crear un nuevo usuario
+POST http://localhost:3001/api/users
 Content-Type: application/json
 
 {
-  "content": "VS Code es genial",
+  "username": "root",
+  "password": "123456"
+}
+
+### Obtener todas las notas
+GET http://localhost:3001/api/notes
+
+### Crear un nuevo elemento en la lista
+POST http://localhost:3001/api/notes
+
+
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY1NzkwNWQzYWZjZDgyMWZlNjViZDUyMSIsImlhdCI6MTcwMjYwMTEzMH0.MXsyeIBRmhxTbvwsudSZoPeJ7ZFM10GIKmmsOYvFX74
+
+{
+  "content": "Aprendiendo FullStack JS",
   "important": true
+}
+
+### Login
+POST http://localhost:3001/api/login
+Content-Type: application/json
+
+{
+    "username": "root",
+    "password": "123456"
 }
