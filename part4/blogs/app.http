@@ -6,8 +6,8 @@ POST http://localhost:3003/api/users
 Content-Type: application/json
 
 {
-    "username": "hellas",
-    "name": "Arto Hellas",
+    "username": "mluukkai",
+    "name": "Matti Luukkainen",
     "password": "password"
 }
 
@@ -19,8 +19,8 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-    "title": "Nuevo blog",
-    "author": "Nuevo autor",
+    "title": "Blog de prueba",
+    "author": "Miguel Angel",
     "url": "http://www.nuevoblog.com",
     "likes": 0
 }
@@ -34,4 +34,4 @@ Content-Type: application/json
 }
 
 ### Delete a blog
-DELETE http://localhost:3003/api/blogs/6578bc391a038e04e52abae3
+DELETE http://localhost:3003/api/blogs/657cdc711e5b238c46a8db7f
