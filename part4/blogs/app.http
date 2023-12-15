@@ -1,6 +1,16 @@
 ### Obtener todos los usuarios
 GET http://localhost:3003/api/users
 
+### Crear un nuevo usuario
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+    "username": "hellas",
+    "name": "Arto Hellas",
+    "password": "password"
+}
+
 ### Obtener todos los blogs
 GET http://localhost:3003/api/blogs
 

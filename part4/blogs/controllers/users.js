@@ -1,28 +1,40 @@
 import bcrypt from 'bcrypt'
-//import User from '../models/user.js'
+import User from '../models/user.js'
 import express from 'express'
 const usersRouter = express.Router()
 
-const listUsers = [
-    {
-        username: "hellas",
-        name: "Arto Hellas",
-        id: "5f7a4b3d1c9d440000f3d9f5"
-    },
-    {
-        username: "mluukkai",
-        name: "Matti Luukkainen",
-        id: "5f7a4b4a1c9d440000f3d9f6"
-    },
-    {
-        username: "danabramov",
-        name: "Dan Abramov",
-        id: "5f7a4b531c9d440000f3d9f7"
-    }
-]
+usersRouter.get('/', async (request, response) => {
+    const users = await User.find({})
+    response.json(users)
+})
 
-usersRouter.get('/', (request, response) => {
-    response.json(listUsers)
+usersRouter.post('/', async (request, response) => {
+
+    const body = request.body
+
+    if (body.password.length < 3) {
+
+        return response.status(400).json({
+            error: 'password must be at least 3 characters long'
+        })
+
+    }
+
+    const saltRounds = 10
+    const passwordHash = await bcrypt.hash(body.password, saltRounds)
+
+    const user = new User({
+
+        username: body.username,
+        name: body.name,
+        passwordHash,
+
+    })
+
+    const savedUser = await user.save()
+
+    response.status(201).json(savedUser)
+
 })
 
 export default usersRouter
