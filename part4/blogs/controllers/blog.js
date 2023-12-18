@@ -3,6 +3,7 @@ const blogsRouter = Router()
 import Blog from "../models/blog.js"
 import mongoose from "mongoose"
 import User from "../models/user.js"
+import jwt from "jsonwebtoken"
 
 blogsRouter.get('/', async (req, res) => {
 
@@ -11,22 +12,36 @@ blogsRouter.get('/', async (req, res) => {
     res.json(blogs)
 })
 
-blogsRouter.post('/', async (req, res, next) => {
+const getTokenFrom = request => {
+    const authorization = request.get('authorization')
+    if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+      return authorization.substring(7)
+    }
+    return null
+}
+
+blogsRouter.post('/', async (req, res) => {
 
     const body = req.body
 
-    const user = await User.aggregate([{ $sample: { size: 1 } }])
+    const token = getTokenFrom(req)
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+
+    if (!token || !decodedToken.id) {
+        return response.status(401).json({ error: 'token missing or invalid' })
+    }
+
+    const user = await User.findById(decodedToken.id)
 
     const blog = new Blog({
         title: body.title,
         url: body.url,
         author: body.author,
         likes: body.likes,
-        user: user[0]._id
+        user: user._id
     })
 
     const savedBlog = await blog.save()
-                        .catch(error => next(error))
 
     res.status(201).json(savedBlog)
 
