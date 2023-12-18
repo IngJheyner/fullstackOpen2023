@@ -2,8 +2,7 @@ import { Router } from "express"
 const blogsRouter = Router()
 import Blog from "../models/blog.js"
 import mongoose from "mongoose"
-import User from "../models/user.js"
-import jwt from "jsonwebtoken"
+import middleware from "../utils/middleware.js"
 
 blogsRouter.get('/', async (req, res) => {
 
@@ -12,17 +11,10 @@ blogsRouter.get('/', async (req, res) => {
     res.json(blogs)
 })
 
-blogsRouter.post('/', async (req, res) => {
+blogsRouter.post('/', middleware.userExtractor, async (req, res) => { // El middleware userExtractor se encarga de extraer el token del usuario que hace la petición
 
     const body = req.body
-
-    const decodedToken = jwt.verify(req.token, process.env.SECRET)
-
-    if (!req.token || !decodedToken.id) {
-        return response.status(401).json({ error: 'token missing or invalid' })
-    }
-
-    const user = await User.findById(decodedToken.id)
+    const user = req.user
 
     const blog = new Blog({
         title: body.title,
@@ -53,21 +45,15 @@ blogsRouter.put('/:id', async (req, res, next) => {
 
 })
 
-blogsRouter.delete('/:id', async (req, res) => {
+blogsRouter.delete('/:id', middleware.userExtractor, async (req, res) => { // El middleware userExtractor se encarga de extraer el token del usuario que hace la petición
 
     const id = req.params.id
 
     const blog = await Blog.findById(id)
 
-    const decodedToken = jwt.verify(req.token, process.env.SECRET)
+    const user = req.user
 
-    if (!req.token || !decodedToken.id) {
-
-        return res.status(401).json({ error: 'token missing or invalid' })
-
-    }
-
-    if (blog.user.toString() !== decodedToken.id.toString()) {
+    if (blog.user.toString() !== user.id.toString()) {
 
         return res.status(403).json({ error: 'only the creator can delete the blog' })
 

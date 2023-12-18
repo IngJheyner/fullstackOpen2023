@@ -1,4 +1,6 @@
 import logger from "./logger.js"
+import User from "../models/user.js"
+import jwt from "jsonwebtoken"
 
 const requestLogger = (request, response, next) => {
     logger.info("Method:", request.method)
@@ -26,6 +28,7 @@ const errorHandler = (error, request, response, next) => {
     next(error)
 }
 
+// Extraer el token del request y asignarlo a la propiedad token del request para que los demás middlewares puedan acceder a él
 const tokenExtractor = (request, response, next) => {
 
     const authorization = request.get('authorization')
@@ -36,9 +39,23 @@ const tokenExtractor = (request, response, next) => {
     next()
 }
 
+// Extraer el usuario del token
+const userExtractor = async (req, res, next) => {
+    const decodedToken = jwt.verify(req.token, process.env.SECRET)
+
+    if (!req.token || !decodedToken.id) {
+        return res.status(401).json({ error: 'token missing or invalid' })
+    }
+
+    const user = await User.findById(decodedToken.id)
+    req.user = user
+    next()
+}
+
 export default {
     requestLogger,
     unknownEndpoint,
     errorHandler,
-    tokenExtractor
+    tokenExtractor,
+    userExtractor
 }
