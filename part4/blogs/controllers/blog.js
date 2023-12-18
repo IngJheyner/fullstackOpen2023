@@ -53,15 +53,28 @@ blogsRouter.put('/:id', async (req, res, next) => {
 
 })
 
-blogsRouter.delete('/:id', async (req, res, next) => {
+blogsRouter.delete('/:id', async (req, res) => {
 
     const id = req.params.id
 
-    if(!mongoose.Types.ObjectId.isValid(id)) {
-        return next({ name: 'CastError', message: 'malformatted id' })
+    const blog = await Blog.findById(id)
+
+    const decodedToken = jwt.verify(req.token, process.env.SECRET)
+
+    if (!req.token || !decodedToken.id) {
+
+        return res.status(401).json({ error: 'token missing or invalid' })
+
+    }
+
+    if (blog.user.toString() !== decodedToken.id.toString()) {
+
+        return res.status(403).json({ error: 'only the creator can delete the blog' })
+
     }
 
     await Blog.findByIdAndDelete(id)
+
     res.status(204).end()
 
 })
