@@ -26,10 +26,10 @@ GET http://localhost:3003/api/blogs
 ### Crear un nuevo elemento en la lista
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1sdXVra2FpIiwiaWQiOiI2NTdjZGIzYWE0MTgzODBmNGI0ZTFjNmYiLCJpYXQiOjE3MDI5Mzc0MjQsImV4cCI6MTcwMjk0MTAyNH0.Dvn7Wvv3QWTqKNt95AG7OUd63OZ4-rBCWuqRJUHnHtU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1sdXVra2FpIiwiaWQiOiI2NTdjZGIzYWE0MTgzODBmNGI0ZTFjNmYiLCJpYXQiOjE3MDI5Mzc4OTksImV4cCI6MTcwMjk0MTQ5OX0.nOM2VlMX3fOKN1Adx3FS_z1zbHepAzR_qLX23Ylo_6s
 
 {
-    "title": "Blog 2",
+    "title": "Blog 3",
     "author": "Miguel Angel",
     "url": "http://www.nuevoblog.com",
     "likes": 10
