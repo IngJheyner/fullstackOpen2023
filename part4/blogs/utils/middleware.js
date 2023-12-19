@@ -23,6 +23,10 @@ const errorHandler = (error, request, response, next) => {
         return response.status(400).json({ error: error.message })
     } else if (error.name ===  'JsonWebTokenError') {
         return response.status(400).json({ error: error.message })
+    } else if (error.name === 'TokenExpiredError') {
+        return response.status(401).json({
+          error: 'token expired'
+        })
     }
 
     next(error)
@@ -32,8 +36,11 @@ const errorHandler = (error, request, response, next) => {
 const tokenExtractor = (request, response, next) => {
 
     const authorization = request.get('authorization')
+
     if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
         request.token = authorization.substring(7)
+    } else {
+        request.token = null
     }
 
     next()
@@ -41,6 +48,12 @@ const tokenExtractor = (request, response, next) => {
 
 // Extraer el usuario del token
 const userExtractor = async (req, res, next) => {
+
+    //Unathorized
+    if(req.token === null) {
+        return res.status(401).json({ error: 'Unathorized' })
+    }
+
     const decodedToken = jwt.verify(req.token, process.env.SECRET)
 
     if (!req.token || !decodedToken.id) {

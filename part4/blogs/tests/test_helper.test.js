@@ -39,4 +39,16 @@ const usersInDb = async () => {
     return users.map(user => user.toJSON())
 }
 
-export default { initialBlogs, blogsInDb, initialUsers, usersInDb }
+const userLogin = async (api, username, password) => {
+
+    const response = await api
+    .post('/api/login')
+    .send({ username, password })
+    .expect(200)
+    .expect('Content-type', /application\/json/)
+
+    return response.body
+
+}
+
+export default { initialBlogs, blogsInDb, initialUsers, usersInDb, userLogin }
