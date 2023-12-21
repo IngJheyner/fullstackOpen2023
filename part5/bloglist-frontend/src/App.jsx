@@ -69,6 +69,33 @@ const App = () => {
 
     }
 
+    const addBlog = async (event) => {
+
+        event.preventDefault()
+
+        const blogObject = {
+            title: event.target.title.value,
+            author: event.target.author.value,
+            url: event.target.url.value
+        }
+
+        try {
+
+            const blog = await blogService
+                        .create(blogObject)
+
+            setBlogs(blogs.concat(blog))
+
+        }
+        catch (error) {
+
+            console.log('Error creating blog', error)
+
+        }
+
+    }
+
+
     if (user === null) {
 
         return (
@@ -106,6 +133,34 @@ const App = () => {
         <button
         onClick={handleLogout}>logout</button></p>
         <br />
+
+        <h1>Create new</h1>
+        <form
+        onSubmit={addBlog}>
+            <div>
+                title:
+                <input
+                type="text"
+                name='title'
+                />
+            </div>
+            <div>
+                author:
+                <input
+                type="text"
+                name='author'
+                />
+            </div>
+            <div>
+                url:
+                <input
+                type="text"
+                name='url'
+                />
+            </div>
+            <button type="submit">create</button>
+        </form>
+
         {blogs.map(blog =>
             <Blog key={blog.id} blog={blog} />
         )}
