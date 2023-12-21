@@ -3,7 +3,7 @@ POST http://localhost:3003/api/login
 Content-Type: application/json
 
 {
-    "username": "lordoftherings",
+    "username": "mluukkai",
     "password": "password"
 }
 
@@ -44,5 +44,5 @@ Content-Type: application/json
 }
 
 ### Delete a blog
-DELETE http://localhost:3003/api/blogs/6580c748a7565643b2467101
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxvcmRvZnRoZXJpbmdzIiwiaWQiOiI2NTgwY2FhZGRmMmQzODExNmRlNjQ4ZmYiLCJpYXQiOjE3MDI5NDAyODEsImV4cCI6MTcwMjk0Mzg4MX0.z8dOffiOCzd23YSoM0ef_mmYdpjVdO1_NvRseX3ib9I
+DELETE http://localhost:3003/api/blogs/65839010cb0f1cc4896cfd34
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1sdXVra2FpIiwiaWQiOiI2NTdjZGIzYWE0MTgzODBmNGI0ZTFjNmYiLCJpYXQiOjE3MDMxOTEwNzMsImV4cCI6MTcwMzE5NDY3M30.o97QSqKkFIHYGDm2IwzCl-hyPsHmFVxAOXBns9AE8tg
