@@ -5,6 +5,7 @@ import loginService from './services/login'
 import { Notifications } from './components/Notifications'
 import './index.css'
 import { Togglable } from './components/Togglable'
+import { BlogForm } from './components/BlogForm'
 
 const App = () => {
 
@@ -78,20 +79,12 @@ const App = () => {
 
     }
 
-    const addBlog = async (event) => {
-
-        event.preventDefault()
-
-        const blogObject = {
-            title: event.target.title.value,
-            author: event.target.author.value,
-            url: event.target.url.value
-        }
+    const addBlog = async ( blogObject ) => {
 
         try {
 
             const blog = await blogService
-                        .create(blogObject)
+                        .create( blogObject )
 
             setBlogs(blogs.concat(blog))
 
@@ -100,19 +93,16 @@ const App = () => {
                 setErrorMessage({ message: null, type: null })
             }, 5000)
 
-            event.target.title.value = ''
-            event.target.author.value = ''
-            event.target.url.value = ''
-
             blogFormRef.current.toggleVisibility()
 
         }
         catch (error) {
+
             console.log('Error creating blog', error)
+
         }
 
     }
-
 
     if (user === null) {
 
@@ -157,33 +147,8 @@ const App = () => {
         buttonLabel='new blog'
         ref={ blogFormRef }>
 
-            <h1>Create new</h1>
-
-            <form
-                onSubmit={addBlog}>
-                <div>
-                    title:
-                    <input
-                    type="text"
-                    name='title'
-                    />
-                </div>
-                <div>
-                    author:
-                    <input
-                    type="text"
-                    name='author'
-                    />
-                </div>
-                <div>
-                    url:
-                    <input
-                    type="text"
-                    name='url'
-                    />
-                </div>
-                <button type="submit">create</button>
-            </form>
+            <BlogForm 
+            createBlog={ addBlog }/>
 
         </Togglable>
 
