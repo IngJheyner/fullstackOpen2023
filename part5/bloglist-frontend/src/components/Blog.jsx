@@ -1,4 +1,12 @@
-import { useState } from "react"
+import { useState } from 'react'
+import PropTypes from 'prop-types'
+
+Blog.propTypes = {
+    blog: PropTypes.object.isRequired,
+    updateBlog: PropTypes.func.isRequired,
+    removeBlog: PropTypes.func.isRequired,
+    user: PropTypes.object.isRequired
+}
 
 const Blog = ( props ) => {
 
@@ -40,7 +48,7 @@ const Blog = ( props ) => {
 
     return (
         <div
-        style={ blogStyle }>
+            style={ blogStyle }>
 
             <div>
 
@@ -52,18 +60,18 @@ const Blog = ( props ) => {
 
                     <p>{blog.url}</p>
                     <p>likes {blog.likes}
-                    <button
-                    type="button"
-                    onClick={updateBlogLikes}>
-                        like
-                    </button></p>
+                        <button
+                            type="button"
+                            onClick={updateBlogLikes}>
+                            like
+                        </button></p>
                     <p>{blog.user.name}</p>
 
                     {user.username === blog.user.username
-                    ? <button
-                    type="button"
-                    onClick={removeBlogPost}>remove</button>
-                    : null}
+                        ? <button
+                            type="button"
+                            onClick={removeBlogPost}>remove</button>
+                        : null}
 
                 </div>
 

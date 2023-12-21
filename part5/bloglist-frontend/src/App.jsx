@@ -95,8 +95,7 @@ const App = () => {
 
         try {
 
-            const blog = await blogService
-                        .create( blogObject )
+            const blog = await blogService.create( blogObject )
 
             setBlogs(blogs.concat(blog))
 
@@ -120,8 +119,7 @@ const App = () => {
 
         try {
 
-            const blog = await blogService
-                        .update( blogObject )
+            const blog = await blogService.update( blogObject )
 
             setBlogs(blogs.map(b => b.id === blog.id ? blog : b))
 
@@ -162,19 +160,19 @@ const App = () => {
                     <div>
                         username
                         <input
-                        type="text"
-                        value={username}
-                        name="Username"
-                        onChange={({ target }) => setUsername(target.value)}
+                            type="text"
+                            value={username}
+                            name="Username"
+                            onChange={({ target }) => setUsername(target.value)}
                         />
                     </div>
                     <div>
                         password
                         <input
-                        type="password"
-                        value={password}
-                        name="Password"
-                        onChange={({ target }) => setPassword(target.value)}
+                            type="password"
+                            value={password}
+                            name="Password"
+                            onChange={({ target }) => setPassword(target.value)}
                         />
                     </div>
                     <button type="submit">login</button>
@@ -185,32 +183,36 @@ const App = () => {
 
     return (
         <div>
-        <h2>blogs</h2>
-        <Notifications info={errorMessage} />
-        <p>{user.name} logged in
-        <button
-        onClick={handleLogout}>logout</button></p>
+            <h2>blogs</h2>
+            <Notifications info={errorMessage} />
+            <p>{user.name} logged in
+                <button
+                    onClick={handleLogout}>logout
+                </button>
+            </p>
 
-        <Togglable
-        buttonLabel='new blog'
-        ref={ blogFormRef }>
+            <Togglable
+                buttonLabel='new blog'
+                ref={ blogFormRef }
+            >
 
-            <BlogForm
-            createBlog={ addBlog }/>
+                <BlogForm
+                    createBlog={ addBlog }
+                />
 
-        </Togglable>
+            </Togglable>
 
-        <br />
+            <br />
 
-        {blogs.map(blog =>
-            <Blog
-            key={blog.id}
-            blog={blog}
-            updateBlog={updateBlog}
-            removeBlog={removeBlog}
-            user={user}
-            />
-        )}
+            {blogs.map(blog =>
+                <Blog
+                    key={blog.id}
+                    blog={blog}
+                    updateBlog={updateBlog}
+                    removeBlog={removeBlog}
+                    user={user}
+                />
+            )}
         </div>
     )
 }

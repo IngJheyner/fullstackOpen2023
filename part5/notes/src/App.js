@@ -4,7 +4,7 @@ import Notification from './components/Notification.js'
 import Footer from './components/Footer.js'
 import noteService from './services/notes.js'
 import loginService from './services/login.js'
-import LoginForm from './components/Login.jsx'
+import LoginForm from './components/LoginForm.jsx'
 import Togglable from './components/Togglable.jsx'
 import NoteForm from './components/NoteForm.jsx'
 
@@ -20,11 +20,10 @@ const App = () => {
     const noteFormRef = useRef()
 
     useEffect(() => {
-        noteService
-        .getAll()
-        .then(initialNotes => {
-            setNotes(initialNotes)
-        })
+        noteService.getAll()
+            .then(initialNotes => {
+                setNotes(initialNotes)
+            })
     }, [])
 
     useEffect(() => {
@@ -37,8 +36,8 @@ const App = () => {
     }, [])
 
     const notesToShow = showAll
-    ? notes
-    : notes.filter(note => note.important)
+        ? notes
+        : notes.filter(note => note.important)
 
     // Agregar notas
     const addNote = (noteObject) => {
@@ -57,22 +56,22 @@ const App = () => {
 
     // Cambiar importancia de las notas
     const toggleImportanceOf = id => {
-      const note = notes.find(n => n.id === id)
-      const changedNote = { ...note, important: !note.important }
+        const note = notes.find(n => n.id === id)
+        const changedNote = { ...note, important: !note.important }
 
-      noteService
-        .update(id, changedNote).then(returnedNote => {
-          setNotes(notes.map(note => note.id !== id ? note : returnedNote))
-        })
-        .catch(error => {
-          setErrorMessage(
-            `Note '${note.content}' was already removed from server`
-          )
-          setTimeout(() => {
-            setErrorMessage(null)
-          }, 5000)
-          setNotes(notes.filter(n => n.id !== id))
-        })
+        noteService
+            .update(id, changedNote).then(returnedNote => {
+                setNotes(notes.map(note => note.id !== id ? note : returnedNote))
+            })
+            .catch( () => {
+                setErrorMessage(
+                    `Note '${note.content}' was already removed from server`
+                )
+                setTimeout(() => {
+                    setErrorMessage(null)
+                }, 5000)
+                setNotes(notes.filter(n => n.id !== id))
+            })
     }
 
     // Login
@@ -110,11 +109,11 @@ const App = () => {
             <Togglable buttonLabel='login'>
 
                 <LoginForm
-                username={username}
-                password={password}
-                handleUsernameChange={({ target }) => setUsername(target.value)}
-                handlePasswordChange={({ target }) => setPassword(target.value)}
-                handleSubmit={handleLogin}
+                    username={username}
+                    password={password}
+                    handleUsernameChange={({ target }) => setUsername(target.value)}
+                    handlePasswordChange={({ target }) => setPassword(target.value)}
+                    handleSubmit={handleLogin}
                 />
 
             </Togglable>
@@ -124,12 +123,13 @@ const App = () => {
     // Formulario de notas
     const noteForm = () => (
         <Togglable
-        buttonLabel='new note'
-        ref={ noteFormRef }>
-           <NoteForm
-            createNote={addNote}
+            buttonLabel='new note'
+            ref={ noteFormRef }
+        >
+            <NoteForm
+                createNote={addNote}
             >
-           </NoteForm>
+            </NoteForm>
         </Togglable>
     )
 
@@ -157,19 +157,19 @@ const App = () => {
 
             <ul>
                 <ul>
-                {notesToShow.map(note =>
-                    <Note
-                    key={note.id}
-                    note={note}
-                    toggleImportance={() => toggleImportanceOf(note.id)}
-                    />
-                )}
+                    {notesToShow.map(note =>
+                        <Note
+                            key={note.id}
+                            note={note}
+                            toggleImportance={() => toggleImportanceOf(note.id)}
+                        />
+                    )}
                 </ul>
             </ul>
 
             <Footer />
         </div>
     )
-    }
+}
 
 export default App

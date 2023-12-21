@@ -1,4 +1,8 @@
-import React from 'react'
+import PropTypes from 'prop-types'
+
+Notifications.propTypes = {
+    info: PropTypes.object.isRequired
+}
 
 export const Notifications = ({ info }) => {
 
