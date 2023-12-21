@@ -134,6 +134,24 @@ const App = () => {
 
     }
 
+    const removeBlog = async ( id ) => {
+
+        try {
+
+            await blogService
+                .remove( id )
+
+            setBlogs(blogs.filter(b => b.id !== id))
+
+        }
+        catch (error) {
+
+            console.log('Error removing blog', error)
+
+        }
+
+    }
+
     if (user === null) {
 
         return (
@@ -188,7 +206,10 @@ const App = () => {
             <Blog
             key={blog.id}
             blog={blog}
-            updateBlog={ updateBlog }/>
+            updateBlog={updateBlog}
+            removeBlog={removeBlog}
+            user={user}
+            />
         )}
         </div>
     )
