@@ -1,19 +1,23 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Note from './components/Note.js'
 import Notification from './components/Notification.js'
 import Footer from './components/Footer.js'
 import noteService from './services/notes.js'
 import loginService from './services/login.js'
+import LoginForm from './components/Login.jsx'
+import Togglable from './components/Togglable.jsx'
+import NoteForm from './components/NoteForm.jsx'
 
 const App = () => {
 
     const [notes, setNotes] = useState([])
-    const [newNote, setNewNote] = useState('')
     const [showAll, setShowAll] = useState(true)
     const [errorMessage, setErrorMessage] = useState(null)
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [user, setUser] = useState(null)
+
+    const noteFormRef = useRef()
 
     useEffect(() => {
         noteService
@@ -32,29 +36,26 @@ const App = () => {
         }
     }, [])
 
-  const addNote = (event) => {
-    event.preventDefault()
-    const noteObject = {
-      content: newNote,
-      important: Math.random() > 0.5,
-    }
-
-    noteService
-      .create(noteObject)
-        .then(returnedNote => {
-        setNotes(notes.concat(returnedNote))
-        setNewNote('')
-      })
-  }
-
-  const handleNoteChange = (event) => {
-    setNewNote(event.target.value)
-  }
-
     const notesToShow = showAll
     ? notes
     : notes.filter(note => note.important)
 
+    // Agregar notas
+    const addNote = (noteObject) => {
+
+        // Se llama al metodo toggleVisibility del componente Togglable para ocultar el formulario
+        // Con la referencia noteFormRef se puede acceder a los metodos del componente Togglable
+        noteFormRef.current.toggleVisibility()
+
+        noteService
+            .create(noteObject)
+            .then(returnedNote => {
+                setNotes(notes.concat(returnedNote))
+            })
+
+    }
+
+    // Cambiar importancia de las notas
     const toggleImportanceOf = id => {
       const note = notes.find(n => n.id === id)
       const changedNote = { ...note, important: !note.important }
@@ -74,6 +75,7 @@ const App = () => {
         })
     }
 
+    // Login
     const handleLogin = async (event) => {
         event.preventDefault()
 
@@ -100,38 +102,35 @@ const App = () => {
         }
     }
 
-    const loginForm = () => (
-        <form onSubmit={handleLogin}>
-            <div>
-                username
-                <input
-                type="text"
-                value={username}
-                name="Username"
-                onChange={({ target }) => setUsername(target.value)}
-                />
-            </div>
-            <div>
-                password
-                <input
-                type="password"
-                value={password}
-                name="Password"
-                onChange={({ target }) => setPassword(target.value)}
-                />
-            </div>
-            <button type="submit">login</button>
-        </form>
-    )
+    // Formulario de login
+    const loginForm = () => {
 
+        return (
+
+            <Togglable buttonLabel='login'>
+
+                <LoginForm
+                username={username}
+                password={password}
+                handleUsernameChange={({ target }) => setUsername(target.value)}
+                handlePasswordChange={({ target }) => setPassword(target.value)}
+                handleSubmit={handleLogin}
+                />
+
+            </Togglable>
+        )
+    }
+
+    // Formulario de notas
     const noteForm = () => (
-        <form onSubmit={addNote}>
-            <input
-                value={newNote}
-                onChange={handleNoteChange}
-            />
-            <button type="submit">save</button>
-        </form>
+        <Togglable
+        buttonLabel='new note'
+        ref={ noteFormRef }>
+           <NoteForm
+            createNote={addNote}
+            >
+           </NoteForm>
+        </Togglable>
     )
 
     return (
