@@ -30,17 +30,17 @@ blogsRouter.post('/', middleware.userExtractor, async (req, res) => { // El midd
 
 })
 
-blogsRouter.put('/:id', async (req, res, next) => {
+blogsRouter.put('/:id', async (req, res) => {
 
     const id = req.params.id
     const blog = req.body
 
-    if(!mongoose.Types.ObjectId.isValid(id)) {
-        return next({ name: 'CastError', message: 'malformatted id' })
-    }
+    // if(!mongoose.Types.ObjectId.isValid(id)) {
+    //     return next({ name: 'CastError', message: 'malformatted id' })
+    // }
 
     const updatedBlog = await Blog.findByIdAndUpdate(id, blog, { new: true })
-                            .catch(error => next(error))
+
     res.json(updatedBlog)
 
 })
