@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import { Notifications } from './components/Notifications'
+import './index.css'
 
 const App = () => {
 
@@ -9,6 +11,7 @@ const App = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [user, setUser] = useState(null)
+    const [errorMessage, setErrorMessage] = useState({ message: null, type: null })
 
     useEffect(() => {
         blogService.getAll().then(blogs =>
@@ -46,7 +49,10 @@ const App = () => {
 
         } catch (error) {
 
-            console.log('Wrong credentials')
+            setErrorMessage({ message: 'Wrong credentials', type: 'error' })
+            setTimeout(() => {
+                setErrorMessage({ message: null, type: null })
+            }, 5000)
 
         }
 
@@ -86,11 +92,14 @@ const App = () => {
 
             setBlogs(blogs.concat(blog))
 
+            setErrorMessage({ message: `A new blog ${blog.title} by ${blog.author} added`, type: 'success' })
+            setTimeout(() => {
+                setErrorMessage({ message: null, type: null })
+            }, 5000)
+
         }
         catch (error) {
-
             console.log('Error creating blog', error)
-
         }
 
     }
@@ -101,6 +110,7 @@ const App = () => {
         return (
             <div>
                 <h2>Log in to application</h2>
+                <Notifications info={errorMessage} />
                 <form onSubmit={handleLogin}>
                     <div>
                         username
@@ -129,6 +139,7 @@ const App = () => {
     return (
         <div>
         <h2>blogs</h2>
+        <Notifications info={errorMessage} />
         <p>{user.name} logged in
         <button
         onClick={handleLogout}>logout</button></p>
