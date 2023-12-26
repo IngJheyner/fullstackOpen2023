@@ -1,9 +1,5 @@
 import PropTypes from 'prop-types'
 
-BlogForm.propTypes = {
-    createBlog: PropTypes.func.isRequired
-}
-
 export const BlogForm = ({ createBlog }) => {
 
     const addBlog = async (event) => {
@@ -33,6 +29,7 @@ export const BlogForm = ({ createBlog }) => {
                     <input
                         type="text"
                         name='title'
+                        id='title'
                     />
                 </div>
                 <div>
@@ -40,6 +37,7 @@ export const BlogForm = ({ createBlog }) => {
                     <input
                         type="text"
                         name='author'
+                        id='author'
                     />
                 </div>
                 <div>
@@ -47,10 +45,15 @@ export const BlogForm = ({ createBlog }) => {
                     <input
                         type="text"
                         name='url'
+                        id='url'
                     />
                 </div>
                 <button type="submit">create</button>
             </form>
         </div>
     )
+}
+
+BlogForm.propTypes = {
+    createBlog: PropTypes.func.isRequired
 }
