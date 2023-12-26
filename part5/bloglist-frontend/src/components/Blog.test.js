@@ -1,6 +1,6 @@
 // import React from 'react'
 //import '@testing-library/jest-dom/extend-expect'
-import { render } from '@testing-library/react'
+import { render, fireEvent } from '@testing-library/react'
 // import { prettyDOM } from '@testing-library/dom'
 import Blog from './Blog.jsx'
 
@@ -41,4 +41,39 @@ test('renders content', () => {
     expect(component.container).toHaveTextContent(blog.title)
     expect(component.container).toHaveTextContent(blog.author)
 
+})
+
+test('clicking the button shows url and likes', () => {
+    const blog = {
+        title: 'Component testing is done with react-testing-library',
+        author: 'Jest',
+        url: 'www.jest.com',
+        likes: 5,
+        user: {
+            name: 'Test User',
+            username: 'testuser'
+        }
+    }
+
+    const user = {
+        username: 'root',
+        name: 'Superuser',
+        id: '5f6f7c9c3b1c4b1f9c6c2a9e'
+    }
+
+    const mockHandler = jest.fn()
+
+    const component = render(
+        <Blog
+            blog={blog}
+            updateBlog={mockHandler}
+            removeBlog={mockHandler}
+            user={user} />
+    )
+
+    const button = component.getByText('view')
+    fireEvent.click(button)
+
+    expect(component.container).toHaveTextContent(blog.url)
+    expect(component.container).toHaveTextContent(`likes ${blog.likes}`)
 })
