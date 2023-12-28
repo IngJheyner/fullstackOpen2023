@@ -1,9 +1,5 @@
 import PropTypes from 'prop-types'
 
-Notifications.propTypes = {
-    info: PropTypes.object.isRequired
-}
-
 export const Notifications = ({ info }) => {
 
     if (info.message === null) {
@@ -15,4 +11,8 @@ export const Notifications = ({ info }) => {
             {info.message}
         </div>
     )
+}
+
+Notifications.propTypes = {
+    info: PropTypes.object.isRequired
 }
