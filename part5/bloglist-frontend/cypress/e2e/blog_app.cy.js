@@ -42,7 +42,7 @@ describe('Blog app', () => {
         })
     })
 
-    describe.only('When logged in', function() {
+    describe('When logged in', function() {
 
         beforeEach(function() {
 
@@ -77,6 +77,25 @@ describe('Blog app', () => {
             cy.contains('view').click()
             cy.contains('remove').click()
             cy.get('html').should('not.contain', 'a blog created by cypress')
+        })
+
+        it('Only the creator of a blog can delete it', function() {
+
+            cy.createBlog({ title: 'a blog created by cypress', author: 'author', url: 'www.cypress.com' })
+
+            cy.contains('logout').click()
+
+            const user = {
+                name: 'Luis Angel',
+                username: 'luisangel',
+                password: '123456'
+            }
+
+            cy.request('POST', 'http://localhost:3003/api/users/', user)
+            cy.login({ username: 'luisangel', password: '123456' })
+
+            cy.contains('view').click()
+            cy.contains('remove').should('not.exist')
         })
 
     })
