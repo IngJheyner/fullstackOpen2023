@@ -65,7 +65,8 @@ const App = () => {
 
         } catch (error) {
 
-            setErrorMessage({ message: 'Wrong credentials', type: 'error' })
+            const { response } = error
+            setErrorMessage({ message: response.data.error, type: 'error' })
             setTimeout(() => {
                 setErrorMessage({ message: null, type: null })
             }, 5000)
@@ -164,6 +165,7 @@ const App = () => {
                             value={username}
                             name="Username"
                             onChange={({ target }) => setUsername(target.value)}
+                            id='username'
                         />
                     </div>
                     <div>
@@ -173,9 +175,12 @@ const App = () => {
                             value={password}
                             name="Password"
                             onChange={({ target }) => setPassword(target.value)}
+                            id='password'
                         />
                     </div>
-                    <button type="submit">login</button>
+                    <button type="submit"
+                        id='login-button'
+                    >login</button>
                 </form>
             </div>
         )
@@ -185,7 +190,7 @@ const App = () => {
         <div>
             <h2>blogs</h2>
             <Notifications info={errorMessage} />
-            <p>{user.name} logged in
+            <p>{user.name} logged-in
                 <button
                     onClick={handleLogout}>logout
                 </button>

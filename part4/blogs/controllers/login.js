@@ -9,7 +9,7 @@ loginRouter.post('/', async (request, response) =>{
 
     const user = await User.findOne( { username: body.username } );
 
-    if (process.env.NODE_ENV !== 'test') {
+    //if (process.env.NODE_ENV !== 'test') {
 
         const passwordCorrect = user === null
             ? false
@@ -20,7 +20,7 @@ loginRouter.post('/', async (request, response) =>{
                 error: 'invalid username or password'
             })
         }
-    }
+    //}
 
     const userForToken = {
         username: user.username,
