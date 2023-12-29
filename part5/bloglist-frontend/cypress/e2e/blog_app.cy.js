@@ -98,6 +98,62 @@ describe('Blog app', () => {
             cy.contains('remove').should('not.exist')
         })
 
+        it('Blogs are ordered according to likes', function() {
+
+            cy.createBlog({ title: 'a blog created by cypress', author: 'cypress', url: 'www.cypress.com' })
+            cy.createBlog({ title: 'a blog created by cypress2', author: 'cypress2', url: 'www.cypress2.com' })
+            cy.createBlog({ title: 'a blog created by cypress3', author: 'cypress3', url: 'www.cypress3.com' })
+
+            cy.contains('a blog created by cypress')
+                .parent()
+                .contains('view')
+                .eq(0)
+                .click()
+                .parent()
+                .contains('like')
+                .as('btnLike1')
+
+            cy.get('@btnLike1').click()
+            cy.contains('likes 1').should('be.visible') // Espera hasta que el texto 'likes: 1' sea visible
+            cy.get('@btnLike1').click()
+            cy.contains('likes 2').should('be.visible') // Espera hasta que el texto 'likes: 2' sea visible
+            cy.get('@btnLike1').click()
+            cy.contains('likes 3').should('be.visible') // Espera hasta que el texto 'likes: 1' sea visible
+
+            cy.contains('a blog created by cypress2')
+                .parent()
+                .contains('view')
+                .eq(0)
+                .click()
+                .parent()
+                .contains('like')
+                .as('btnLike2')
+
+            cy.get('@btnLike2').click()
+            cy.contains('likes 1').should('be.visible') // Espera hasta que el texto 'likes: 1' sea visible
+            cy.get('@btnLike2').click()
+            cy.contains('likes 2').should('be.visible') // Espera hasta que el texto 'likes: 2' sea visible
+
+            cy.contains('a blog created by cypress3')
+                .parent()
+                .contains('view')
+                .eq(0)
+                .click()
+                .parent()
+                .contains('like')
+                .as('btnLike3')
+
+            cy.get('@btnLike3').click()
+            cy.contains('likes 1').should('be.visible') // Espera hasta que el texto 'likes: 1' sea visible
+
+            cy.get('.blog').then(blogs => {
+                cy.wrap(blogs[0]).contains('likes 3')
+                cy.wrap(blogs[1]).contains('likes 2')
+                cy.wrap(blogs[2]).contains('likes 1')
+            })
+
+        })
+
     })
 
 })
