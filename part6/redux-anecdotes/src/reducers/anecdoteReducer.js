@@ -44,6 +44,7 @@ const reducer = (state = initialState, action) => {
     }
 }
 
+// Action creators 6.6
 export const newVote = (id) => {
     return {
         type: 'VOTE',
