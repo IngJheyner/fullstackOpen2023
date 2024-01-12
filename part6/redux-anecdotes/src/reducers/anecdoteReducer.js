@@ -1,3 +1,5 @@
+import { createSlice } from '@reduxjs/toolkit'
+
 const anecdotesAtStart = [
   'If it hurts, do it more often',
   'Adding manpower to a late software project makes it later!',
@@ -19,48 +21,34 @@ const asObject = (anecdote) => {
 
 const initialState = anecdotesAtStart.map(asObject)
 
-const anecdoteReducer = (state = initialState, action) => {
-    //console.log('state now: ', state)
-    // console.log('action', action)
 
-    switch (action.type) {
-        case 'VOTE': {
-            const id = action.data.id
-            const anecdoteToChange = state.find(n => n.id === id)
-            const changedAnecdote = {
-                ...anecdoteToChange,
-                votes: anecdoteToChange.votes + 1
-            }
-            return state.map(anecdote =>
-                anecdote.id !== id ? anecdote : changedAnecdote
-            ).sort((a, b) => b.votes - a.votes) // Ordena las anécdotas por número de votos
+const anecdoteSlice = createSlice({
+    name: 'anecdotes',
+    initialState,
+    reducers: {
+      vote(state, action) {
+        const id = action.payload
+        const anecdoteToChange = state.find(n => n.id === id)
+        const changedAnecdote = {
+          ...anecdoteToChange,
+          votes: anecdoteToChange.votes + 1
         }
-        case 'NEW_ANECDOTE': {
-            return [...state, action.data].sort((a, b) => b.votes - a.votes) // Ordena las anécdotas por número de votos
-        }
-        default: {
-            return state.sort((a, b) => b.votes - a.votes) // Ordena las anécdotas por número de votos
-        }
-    }
-}
+        return state.map(anecdote =>
+          anecdote.id !== id ? anecdote : changedAnecdote
+        ).sort((a, b) => b.votes - a.votes) // Ordena las anécdotas por número de votos
+      },
+      create(state, action) {
+        const content = action.payload
+        state.push({
+          content,
+          votes: 0,
+          id: getId(),
+        })
 
-// Action creators 6.6
-export const newVote = (id) => {
-    return {
-        type: 'VOTE',
-        data: { id }
-    }
-}
+        return state.sort((a, b) => b.votes - a.votes) // Ordena las anécdotas por número de votos
+      },
+    },
+})
 
-export const newAnecdote = (content) => {
-    return {
-        type: 'NEW_ANECDOTE',
-        data: {
-            content,
-            id: getId(),
-            votes: 0
-        }
-    }
-}
-
-export default anecdoteReducer
+export const { vote, create } = anecdoteSlice.actions
+export default anecdoteSlice.reducer
