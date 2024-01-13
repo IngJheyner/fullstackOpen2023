@@ -39,11 +39,12 @@ const anecdoteSlice = createSlice({
       },
       create(state, action) {
         const content = action.payload
-        state.push({
-          content,
-          votes: 0,
-          id: getId(),
-        })
+        // state.push({
+        //   content,
+        //   votes: 0,
+        //   id: getId(),
+        // })
+        state.push(content)
 
         return state.sort((a, b) => b.votes - a.votes) // Ordena las anécdotas por número de votos
       },
