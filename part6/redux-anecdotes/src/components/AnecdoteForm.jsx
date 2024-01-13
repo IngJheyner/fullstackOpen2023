@@ -21,7 +21,9 @@ export const AnecdoteForm = () => {
         dispatch(notificationChange(`you created '${content}'`))
 
         setTimeout(() => {
+
             dispatch(clearNotification())
+
         }, 5000)
     }
 
