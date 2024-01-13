@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux'
 //import { create } from '../reducers/anecdoteReducer'
-import { notificationChange, clearNotification } from '../reducers/notificationReducer'
-
+//import { notificationChange, clearNotification } from '../reducers/notificationReducer'
+import { setNotification } from '../reducers/notificationReducer'
 //import anecdoteService from '../services/anecdotes'
 import { createAnecdote } from '../reducers/anecdoteReducer'
 
@@ -18,13 +18,17 @@ export const AnecdoteForm = () => {
         // const newAnecdote = await anecdoteService.createNew(content)
         // dispatch(create(newAnecdote))
         dispatch(createAnecdote(content))
-        dispatch(notificationChange(`you created '${content}'`))
+        //dispatch(notificationChange(`new anecdote '${content}'`))
 
-        setTimeout(() => {
+        // setTimeout(() => {
 
-            dispatch(clearNotification())
+        //     dispatch(clearNotification())
 
-        }, 5000)
+        // }, 5000)
+
+        // Redus thunk
+        dispatch(setNotification(`new anecdote '${content}'`, 5))
+
     }
 
     return <>

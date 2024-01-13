@@ -38,12 +38,17 @@
     {
       "id": "69b6",
       "content": "asa",
-      "votes": 0
+      "votes": 2
     },
     {
       "id": "b45d",
       "content": "b",
       "votes": 5
+    },
+    {
+      "id": "eff2",
+      "content": "anecdote 100",
+      "votes": 1
     }
   ]
 }
