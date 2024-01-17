@@ -18,7 +18,7 @@ const App = () => {
 //     },
 //   ]
 
-    const result = useQuery('notes', getAnecdotes, {
+    const result = useQuery('anecdotes', getAnecdotes, {
         retry: false,
     })
 
