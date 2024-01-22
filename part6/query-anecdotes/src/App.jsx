@@ -1,4 +1,5 @@
 import AnecdoteForm from './components/AnecdoteForm'
+import { NotificationContextProvider } from './NotificacionContext'
 import Notification from './components/Notification'
 
 import { useQuery, useMutation, useQueryClient } from 'react-query'
@@ -48,7 +49,10 @@ const App = () => {
     <div>
       <h3>Anecdote app</h3>
 
-      <Notification />
+      
+        <Notification />
+        
+
       <AnecdoteForm />
 
       {anecdotes.map(anecdote =>
