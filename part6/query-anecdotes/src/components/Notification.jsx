@@ -1,10 +1,10 @@
 import { useContext } from "react"
-import { useNotification } from "../NotificacionContext"
+import { useNotificationValue } from "../NotificacionContext"
 
 
 const Notification = () => {
 
-    const { notification } = useNotification()
+    const notification = useNotificationValue()
 
     const style = {
         border: 'solid',

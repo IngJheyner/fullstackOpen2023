@@ -1,11 +1,10 @@
 import { useMutation, useQueryClient } from 'react-query'
 import { createAnecdote } from '../requests.js'
-import React, { useContext } from 'react'
-import { useNotification } from '../NotificacionContext.jsx'
+import { useNotify } from '../NotificacionContext.jsx'
 
 const AnecdoteForm = () => {
 
-    const { notificationDispatch } = useNotification()
+    const notifyWith = useNotify()
 
     const queryClient = useQueryClient()
 
@@ -15,6 +14,10 @@ const AnecdoteForm = () => {
                 ...oldAnecdotes,
                 newAnecdote,
             ])
+            notifyWith(`You created ${newAnecdote.content}`)
+        },
+        onError: (error) => {
+            notifyWith(error.response.data.error)
         }
     })
 
@@ -23,32 +26,9 @@ const AnecdoteForm = () => {
         event.preventDefault()
         const content = event.target.anecdote.value
         event.target.anecdote.value = ''
-
-        if (content.length < 5) {
-            notificationDispatch({
-              type: 'SET_NOTIFICATION',
-              payload: 'Anecdote content must be at least 5 characters long',
-            });
-            setTimeout(() => {
-              notificationDispatch({
-                type: 'CLEAR_NOTIFICATION',
-              });
-            }, 5000);
-            return;
-        }
         //console.log('new anecdote')
         newAnecdoteMutation.mutate({ content })
 
-        notificationDispatch({
-            type: 'SET_NOTIFICATION',
-            payload: `Anecdote ${content} created!`,
-        })
-
-        setTimeout(() => {
-            notificationDispatch({
-                type: 'CLEAR_NOTIFICATION',
-            })
-        }, 5000)
     }
 
   return (

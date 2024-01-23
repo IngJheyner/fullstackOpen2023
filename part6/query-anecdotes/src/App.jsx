@@ -1,38 +1,29 @@
 import AnecdoteForm from './components/AnecdoteForm'
-import { NotificationContextProvider } from './NotificacionContext'
 import Notification from './components/Notification'
 
 import { useQuery, useMutation, useQueryClient } from 'react-query'
 import { getAnecdotes, updateAnecdote } from './requests.js'
 
-import { useNotification } from './NotificacionContext'
+import { useNotify } from './NotificacionContext'
 
 const App = () => {
 
+    const notifyWith = useNotify()
+
     const queryClient = useQueryClient()
+
     const updateAnecdoteMutation = useMutation(updateAnecdote, {
-        onSuccess: () => {
+        onSuccess: ({ content }) => {
             queryClient.invalidateQueries('anecdotes')
+            notifyWith(`You voted for ${content}`)
         }
     })
 
-    const { notificationDispatch } = useNotification()
     const handleVote = (anecdote) => {
         updateAnecdoteMutation.mutate({
             ...anecdote,
             votes: anecdote.votes + 1,
         })
-
-        notificationDispatch({
-            type: 'SET_NOTIFICATION',
-            payload: `You voted for ${anecdote.content}`,
-        })
-
-        setTimeout(() => {
-            notificationDispatch({
-                type: 'CLEAR_NOTIFICATION',
-            })
-        }, 5000)
     }
 
 //   const anecdotes = [
